@@ -29,8 +29,8 @@ version: '3.5'
 services:
   # InfluxDB to persist data
   Influxdb:
-    hostname: "Influxdatabase"
-    image: "influxdb:1.6.4"
+    hostname: "Influxdb"
+    image: "influxdb:1.8-alpine"
     environment:
       INFLUXDB_BIND_ADDRESS: "0.0.0.0:8088"
     ports:
@@ -45,18 +45,18 @@ services:
 
     # For backing up influxDB
   InfluxdbBackup:
-    image: "michielvanwelsenaere/influxdb-backup:latest"
+    image: "influxdbbackup:latest"
     environment:
       INFLUXDB_ACTION: "fullbackup"
       INFLUXDB_ACTION_CRON: "0 0 1 1/1 * ? *"
-      INFLUXDB_HOST: "influxdatabase"
+      INFLUXDB_HOST: "Influxdb"
       INFLUXDB_PORT: "8088"
-      INFLUXDB_BACKUPMEDIUM: "AzureBlob"
-      AZURE_STORAGEACCOUNT_NAME: "your storage account name"
-      AZURE_STORAGEACCOUNT_KEY: "your storage account key"
-      AZURE_STORAGEACCOUNT_CONTAINER: "customContainername"
+      INFLUXDB_BACKUPMEDIUM: "AzureBlob" # This can be either 'LocalDirectory' or 'AzureBlob'.
+      AZURE_STORAGEACCOUNT_NAME: "your storage account name" # This should be changed
+      AZURE_STORAGEACCOUNT_KEY: "your storage account key" # This should be changed
+      AZURE_STORAGEACCOUNT_CONTAINER: "customContainername" # This should be changed
       BACKUP_MAXBACKUPS: "99"
-      BACKUP_FILENAME: "MyBackupFileNamePrefix"
+      BACKUP_FILENAME: "Influxdbbackup" # This can and should be changed if necessary
     depends_on: 
      - Influxdb
     networks:
