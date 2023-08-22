@@ -45,7 +45,7 @@ services:
 
     # For backing up influxDB
   InfluxdbBackup:
-    image: "influxdbbackup:latest"
+    image: "anoruopeter/influxdbbackup:latest"
     environment:
       INFLUXDB_ACTION: "fullbackup"
       INFLUXDB_ACTION_CRON: "0 0 1 1/1 * ? *"

@@ -1,5 +1,5 @@
 # BUILD IMAGE
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS build-env
+FROM mcr.microsoft.com/dotnet/sdk AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
@@ -12,14 +12,14 @@ RUN dotnet publish -c Release -o out
 
 FROM influxdb:1.8-alpine as influxdb
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine3.17
 COPY --from=influxdb /usr/bin/influxd /usr/bin/
 
+# RUN apk add --no-cache bash 
+# RUN mkdir -p /influxdbbackup/data /influxdbbackup/log 
 
-RUN mkdir -p /influxdbbackup/data /influxdbbackup/log 
-
-# RUN apk add --no-cache tzdata bash && \
-# 	mkdir -p /influxdbbackup/data /influxdbbackup/log 
+RUN apk add --no-cache tzdata bash && \
+	mkdir -p /influxdbbackup/data /influxdbbackup/log 
 
 # ----------------- Create ENV variables and set default values -------------------- #
 ENV INFLUXDB_ACTION="null"
