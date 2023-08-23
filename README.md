@@ -109,8 +109,8 @@ Specifying `LocalDirectory` as backup medium will create a zipped backup file in
 
 ```yaml
 volumes:
-      - "./influxdbbackup/log:/influxdbbackup/log"
-      - "./influxdbbackup/data:/influxdbbackup/data"
+      - "influxdbbackup_log:/influxdbbackup/log"
+      - "influxdbbackup_data:/influxdbbackup/data"
 ```
 
 This allows backups to be persisted to a local drive or network share (requires network share to be mounted locally on device).
