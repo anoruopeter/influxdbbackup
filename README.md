@@ -7,18 +7,22 @@
 ![License](https://img.shields.io/github/license/MichielVanwelsenaere/InfluxDB-backup.svg)
 
 This container periodically runs a backup of an InfluxDB database to your backup (cloud) medium of choice.
-It's possible to backup a specific database or all databases at once, all backups are made in the portable format. 
+It's possible to backup a specific database or all databases at once, all backups are made in the portable format.
 The number of backups maintained on (cloud) storage can be configured.
 Functionality available to restore the latest backup from your configured (cloud) medium.
 
 ## Configure InfluxDB for backups
+
 To enable backup capabilities on your influxDB databases you need to configure the bind-address:
-```
+
+```env
 -e INFLUXDB_BIND_ADDRESS=0.0.0.0:8088 
 ```
+
 related influxDB docs to this can be found [here](https://docs.influxdata.com/influxdb/v1.8/administration/config/).
 
 ## Usage
+
 Example using docker-compose:
 
 Cron 1am daily, InfluxDB port 8088, backup files persisted on Azure blob, all databases are backuped. Backups are created with prefix name 'MyBackupFileNamePrefix' in container 'customContainername', 99 backups maintained in total on backup medium.
@@ -66,7 +70,6 @@ networks:
   backend:
 ```
 
-
 ## Environment Variables
 
 ### General
@@ -83,9 +86,11 @@ networks:
 | `BACKUP_FILENAME` | Prefix name for the database backup file. | `cAdvisor_Backup` | `influxdbbackup`   | Yes |
 
 ### Backup medium specific
+
 ```yaml
 INFLUXDB_BACKUPMEDIUM: "Azureblob"
 ```
+
 more information on how to create an Azure storage account can be found [here](https://docs.microsoft.com/en-us/azure/storage/common/storage-quickstart-create-account?tabs=azure-portal).
 
 | Variable        | Description      | Example Usage  | Default   | Optional?  |
@@ -99,6 +104,7 @@ more information on how to create an Azure storage account can be found [here](h
 ```yaml
 INFLUXDB_BACKUPMEDIUM: "LocalDirectory"
 ```
+
 Specifying `LocalDirectory` as backup medium will create a zipped backup file in container path `/influxdbbackup/data`. To persist the backup files locally add the container path to the volumes to persist:
 
 ```yaml
@@ -106,6 +112,7 @@ volumes:
       - "./influxdbbackup/log:/influxdbbackup/log"
       - "./influxdbbackup/data:/influxdbbackup/data"
 ```
+
 This allows backups to be persisted to a local drive or network share (requires network share to be mounted locally on device).
 
 ***
